@@ -436,12 +436,9 @@ export async function getBuildMatches(
       // Mirror @vercel/python's entrypoint candidates
       const candidateDirs = ['', 'src', 'app'];
       const candidateNames = ['app', 'index', 'server', 'main'];
-      const candidates: string[] = [];
-      for (const dir of candidateDirs) {
-        for (const name of candidateNames) {
-          candidates.push(dir ? `${dir}/${name}.py` : `${name}.py`);
-        }
-      }
+      const candidates = candidateDirs.flatMap(dir =>
+        candidateNames.map(name => (dir ? `${dir}/${name}.py` : `${name}.py`))
+      );
       if (!fileList.includes(src)) {
         const existing = candidates.filter(p => fileList.includes(p));
         if (existing.length > 0) {
